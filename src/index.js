@@ -2,11 +2,37 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import * as serviceWorker from './serviceWorker';
+import {Provider} from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import middlewareLogger from './middleware/middleware-logger';
+import thunkMiddleware from 'redux-thunk';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const rootReducer = (state=initialState, action) => {
+    // let lat;
+    // let long;
+    switch (action.type) {
+        case 'CALCULATE':
+        const {lat, long} = action;
+        let newState = Object.assign({}, state, {
+        lat: lat,
+        long: long
+    });
+        return newState;
+        default: 
+            return state;
+    }
+}
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const store = createStore(rootReducer, applyMiddleware(middlewareLogger, thunkMiddleware));
+
+ReactDOM.render(
+    <Provider store = {store}>
+        <App />
+    </Provider>,
+document.getElementById('root'));
+
+
+const initialState = {
+    lat: 0, 
+    long: 0
+}
