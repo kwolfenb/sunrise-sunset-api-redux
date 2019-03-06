@@ -5,10 +5,18 @@ import {connect} from 'react-redux';
 import {fetchInfo} from './../actions';
 
 
+const mapStateToProps = (state) => {
+    return { 
+        props: state
+    }
+}
 
-function Form (){
-let lat;
-let long;
+
+
+function Form ({props}){
+    console.log(props)
+    let lat;
+    let long;
 
  function submitButton(e){
 
@@ -18,8 +26,8 @@ let long;
         long.value = '';
     }
 
-return (
-    <div>
+    return (
+        <div>
             <form onSubmit={submitButton}>
                 <h1>test</h1>
                 <input
@@ -30,7 +38,7 @@ return (
                 <button type='submit'>Submit</button>
             </form>
             <hr/>
-            <h2>{}</h2>
+            <h2>Coordinates: {props.lat}, {props.long} </h2>
         </div>
     )
 }
@@ -39,10 +47,5 @@ Form.propTypes = {
     dispatch: PropTypes.func
 }
 
-const mapStateToProps = (state) => {
-    return { 
-        props: state
-    }
-}
 
 export default connect(mapStateToProps)(Form);
